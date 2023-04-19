@@ -39,6 +39,16 @@ class Home extends Component {
     });
   };
 
+  handleChange = async ({ target }) => {
+    const category = target.value;
+    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?category=${category}`);
+    const products = await response.json();
+    this.setState({
+      prodList: products.results,
+      unmadeSearch: false,
+    });
+  };
+
   render() {
     const { prodList, unmadeSearch, categories } = this.state;
     const emptyList = prodList.length === 0;
@@ -49,12 +59,22 @@ class Home extends Component {
           <button>Carrinho</button>
         </Link>
         <aside>
-          { categories.map((category) => (
-            <label key={ category.id } htmlFor={ category.id } data-testid="category">
-              <input type="radio" name="categories" id={ category.id } />
-              {category.name}
-            </label>
-          )) }
+          <ul>
+            { categories.map((category) => (
+              <li key={ category.id }>
+                <label htmlFor={ category.id } data-testid="category">
+                  <input
+                    type="radio"
+                    name="categories"
+                    onChange={ this.handleChange }
+                    value={ category.id }
+                    id={ category.id }
+                  />
+                  {category.name}
+                </label>
+              </li>
+            )) }
+          </ul>
         </aside>
         <input
           type="text"
@@ -82,5 +102,7 @@ class Home extends Component {
     );
   }
 }
+
+// teste
 
 export default Home;
