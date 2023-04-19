@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Products from '../components/Products';
+import { getCategories } from '../services/api';
 
 class Home extends Component {
   constructor() {
@@ -7,9 +9,17 @@ class Home extends Component {
 
     this.state = {
       prodList: [],
+      categories: [],
       searchTerm: '',
       unmadeSearch: true,
     };
+  }
+
+  async componentDidMount() {
+    const response = await getCategories();
+    this.setState({
+      categories: response,
+    });
   }
 
   handleSearch = ({ target }) => {
@@ -30,11 +40,22 @@ class Home extends Component {
   };
 
   render() {
-    const { prodList, unmadeSearch } = this.state;
+    const { prodList, unmadeSearch, categories } = this.state;
     const emptyList = prodList.length === 0;
 
     return (
-      <section>
+      <section className="home-page">
+        <Link to="/cart" data-testid="shopping-cart-button">
+          <button>Carrinho</button>
+        </Link>
+        <aside>
+          { categories.map((category) => (
+            <label key={ category.id } htmlFor={ category.id } data-testid="category">
+              <input type="radio" name="categories" id={ category.id } />
+              {category.name}
+            </label>
+          )) }
+        </aside>
         <input
           type="text"
           data-testid="query-input"
