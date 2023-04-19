@@ -103,4 +103,6 @@ class Home extends Component {
   }
 }
 
+// teste
+
 export default Home;
