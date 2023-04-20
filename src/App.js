@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
-import { getProductById, getCategories } from './services/api';
+import { getCategories } from './services/api';
 
 import './App.css';
 
@@ -23,9 +23,10 @@ class App extends React.Component {
     });
   };
 
-  handleAddToCart = async ({ target }) => {
-    const id = target.name;
-    const product = await getProductById(id);
+  handleAddToCart = ({ target }) => {
+    const { prodList } = this.state;
+    const prodId = target.name;
+    const product = prodList.find(({ id }) => id === prodId);
     this.setState((prev) => ({
       cartItems: [...prev.cartItems, product],
     }));
