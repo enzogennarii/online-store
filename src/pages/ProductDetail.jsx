@@ -5,15 +5,24 @@ class ProductDetail extends Component {
     const { product } = this.props;
 
     if (!product) {
-      return <div>Carregando...</div>; // Adicione um tratamento para quando o produto ainda estiver sendo carregado
+      return <div>Carregando...
+        { this.state }
+        { this.props.match.params.productId }</div>;
     }
 
     return (
       <section className="product-detail-page">
-        <img src={ product.thumbnail } alt={ product.title } data-testid="product-detail-image" />
+        <img 
+          src={ product.thumbnail } 
+          alt={ product.title } 
+          data-testid="product-detail-image" 
+        />
         <h3 data-testid="product-detail-name">{ product.title }</h3>
         <p data-testid="product-detail-price">{ product.price }</p>
-        <button onClick={() => this.props.addToCart(product)} data-testid="add-to-cart-button">
+        <button 
+          onClick={() => this.props.addToCart(product)} 
+          data-testid="add-to-cart-button"
+        >
           Adicionar ao carrinho
         </button>
       </section>
