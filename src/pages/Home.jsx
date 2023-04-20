@@ -1,56 +1,27 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Products from '../components/Products';
-import { getCategories } from '../services/api';
 
 class Home extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      prodList: [],
-      categories: [],
-      searchTerm: '',
-      unmadeSearch: true,
-    };
-  }
-
   async componentDidMount() {
-    const response = await getCategories();
-    this.setState({
-      categories: response,
-    });
+    const { fetchCategories } = this.props;
+    await fetchCategories();
   }
-
-  handleSearch = ({ target }) => {
-    const { value } = target;
-    this.setState({
-      searchTerm: value,
-    });
-  };
-
-  handleClick = async () => {
-    const { searchTerm } = this.state;
-    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=$${searchTerm}`);
-    const products = await response.json();
-    this.setState({
-      prodList: products.results,
-      unmadeSearch: false,
-    });
-  };
-
-  handleChange = async ({ target }) => {
-    const category = target.value;
-    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?category=${category}`);
-    const products = await response.json();
-    this.setState({
-      prodList: products.results,
-      unmadeSearch: false,
-    });
-  };
 
   render() {
-    const { prodList, unmadeSearch, categories } = this.state;
+    const { handleAddToCart,
+      handleSearchInput,
+      handleSearchButton,
+      handleSetCategory,
+      states } = this.props;
+
+    const {
+      prodList,
+      categories,
+      unmadeSearch,
+    } = states;
+
     const emptyList = prodList.length === 0;
 
     return (
@@ -66,7 +37,7 @@ class Home extends Component {
                   <input
                     type="radio"
                     name="categories"
-                    onChange={ this.handleChange }
+                    onChange={ handleSetCategory }
                     value={ category.id }
                     id={ category.id }
                   />
@@ -79,11 +50,11 @@ class Home extends Component {
         <input
           type="text"
           data-testid="query-input"
-          onChange={ this.handleSearch }
+          onChange={ handleSearchInput }
         />
         <button
           data-testid="query-button"
-          onClick={ this.handleClick }
+          onClick={ handleSearchButton }
         >
           Pesquisar
         </button>
@@ -96,13 +67,30 @@ class Home extends Component {
                 Digite algum termo de pesquisa ou escolha uma categoria.
               </p>
             )
-            : <Products emptyList={ emptyList } prodList={ prodList } /> }
+            : (
+              <Products
+                handleAddToCart={ handleAddToCart }
+                emptyList={ emptyList }
+                prodList={ prodList }
+              />
+            ) }
         </div>
       </section>
     );
   }
 }
 
-// teste
+Home.propTypes = {
+  fetchCategories: PropTypes.func,
+  handleAddToCart: PropTypes.func,
+  handleSearchButton: PropTypes.func,
+  handleSearchInput: PropTypes.func,
+  handleSetCategory: PropTypes.func,
+  states: PropTypes.shape({
+    categories: PropTypes.arrayOf(PropTypes.shape({})),
+    prodList: PropTypes.arrayOf(PropTypes.shape({})),
+    unmadeSearch: PropTypes.bool,
+  }),
+}.isRequired;
 
 export default Home;
