@@ -11,10 +11,10 @@ class ProductDetail extends Component {
 
     return (
       <section className="product-detail-page">
-        <img 
+        <img
           src={ product.thumbnail }
           alt={ product.title }
-          data-testid="product-detail-image" 
+          data-testid="product-detail-image"
         />
         <h3 data-testid="product-detail-name">{ product.title }</h3>
         <p data-testid="product-detail-price">{ product.price }</p>
