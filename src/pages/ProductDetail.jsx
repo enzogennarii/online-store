@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class ProductDetail extends Component {
   render() {
-    const { product } = this.props;
+    const { product, addToCart } = this.props;
 
     if (!product) {
       return <div>Produto não encontrado</div>;
@@ -19,7 +19,7 @@ class ProductDetail extends Component {
         <h3 data-testid="product-detail-name">{ product.title }</h3>
         <p data-testid="product-detail-price">{ product.price }</p>
         <button
-          onClick={ () => this.props.addToCart(product) }
+          onClick={ () => addToCart(product) }
           data-testid="add-to-cart-button"
         >
           Adicionar ao carrinho
