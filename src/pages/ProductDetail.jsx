@@ -27,13 +27,17 @@ class ProductDetail extends Component {
 
     if (loading) {
       return (
-        <div>Carregando...</div>
+        <div>
+          Carregando...
+        </div>
       );
     }
 
     if (error) {
       return (
-        <div>Erro ao carregar produto: { error.message }</div>
+        <div>
+          Erro ao carregar produto: { error.message }
+        </div>
       );
     }
 
