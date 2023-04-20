@@ -1,15 +1,17 @@
+import { element } from 'prop-types';
 import React, { Component } from 'react';
 
 class ProductDetail extends Component {
   render() {
-    const { product } = this.props;
+    const { prodList, addToCart } = this.props;
+    const productId = parseInt(this.props.match.params.productId);
+
+    const product = prodList.find(p => p.id === productId);
 
     if (!product) {
-      return <div>Carregando...
-        { this.state }
-        { this.props.match.params.productId }</div>;
+      return <div>Produto não encontrado</div>;
     }
-
+    
     return (
       <section className="product-detail-page">
         <img 
