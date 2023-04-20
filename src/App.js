@@ -24,12 +24,18 @@ class App extends React.Component {
   };
 
   handleAddToCart = ({ target }) => {
-    const { prodList } = this.state;
+    const { cartItems, prodList } = this.state;
     const prodId = target.name;
     const product = prodList.find(({ id }) => id === prodId);
-    this.setState((prev) => ({
-      cartItems: [...prev.cartItems, product],
-    }));
+    if (!(cartItems.some((item) => prodId === item.id))) {
+      product.quantity = 1;
+      this.setState((prev) => ({
+        cartItems: [...prev.cartItems, product],
+      }), () => this.saveCartOnLocalStorage());
+    } else {
+      product.quantity += 1;
+      this.saveCartOnLocalStorage();
+    }
   };
 
   handleSearchInput = ({ target }) => {
@@ -57,6 +63,11 @@ class App extends React.Component {
       prodList: products.results,
       unmadeSearch: false,
     });
+  };
+
+  saveCartOnLocalStorage = () => {
+    const { cartItems } = this.state;
+    localStorage.setItem('cart-items', JSON.stringify(cartItems));
   };
 
   render() {
