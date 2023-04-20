@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 class ProductDetail extends Component {
   state = {
@@ -24,7 +25,7 @@ class ProductDetail extends Component {
   }
 
   render() {
-    const { addToCart } = this.props;
+    const { handleAddToCart } = this.props;
     const { product, loading, error } = this.state;
 
     if (loading) {
@@ -46,6 +47,9 @@ class ProductDetail extends Component {
 
     return (
       <section className="product-detail-page">
+        <Link to="/cart" data-testid="shopping-cart-button">
+          <button>Carrinho</button>
+        </Link>
         <img
           src={ product.thumbnail }
           alt={ product.title }
@@ -54,8 +58,9 @@ class ProductDetail extends Component {
         <h3 data-testid="product-detail-name">{ product.title }</h3>
         <p data-testid="product-detail-price">{ product.price }</p>
         <button
-          onClick={ () => addToCart(product) }
-          data-testid="add-to-cart-button"
+          name={ product.id }
+          onClick={ handleAddToCart }
+          data-testid="product-detail-add-to-cart"
         >
           Adicionar ao carrinho
         </button>
@@ -65,7 +70,7 @@ class ProductDetail extends Component {
 }
 
 ProductDetail.propTypes = {
-  addToCart: PropTypes.func.isRequired,
+  handleAddToCart: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       productId: PropTypes.string.isRequired,
