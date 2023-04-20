@@ -16,7 +16,7 @@ class Products extends Component {
                   key={ p.id }
                   data-testid="product"
                 >
-                  <Link to={`/products/${p.id}`} data-testid="product-detail-link">
+                  <Link to={ `/products/${p.id}` } data-testid="product-detail-link">
                     <img src={ p.thumbnail } alt={ p.title } />
                     <p>{ p.title }</p>
                     <p>{ p.price }</p>
