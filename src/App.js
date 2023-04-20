@@ -93,7 +93,16 @@ class App extends React.Component {
             />) }
           />
           <Route exact path="/cart" render={ () => <Cart cartItems={ cartItems } /> } />
-          <Route exact path="/products/:productId" component={ ProductDetail } />
+          <Route
+            exact
+            path="/products/:productId"
+            render={ (props) => (
+              <ProductDetail
+                { ...props }
+                handleAddToCart={ this.handleAddToCart }
+              />
+            ) }
+          />
         </Switch>
       </main>
     );
