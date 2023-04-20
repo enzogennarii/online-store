@@ -1,16 +1,9 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 class Cart extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      cartItems: [],
-    };
-  }
-
   render() {
-    const { cartItems } = this.state;
+    const { cartItems } = this.props;
     const isCartEmpty = cartItems.length === 0;
 
     return (
@@ -22,5 +15,9 @@ class Cart extends Component {
     );
   }
 }
+
+Cart.propTypes = {
+  cartItems: PropTypes.arrayOf(PropTypes.shape({})),
+}.isRequired;
 
 export default Cart;
