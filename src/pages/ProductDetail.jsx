@@ -9,7 +9,9 @@ class ProductDetail extends Component {
   };
 
   async componentDidMount() {
-    const { productId } = this.props.match.params;
+    const { match } = this.props;
+    const { params } = match;
+    const { productId } = params;
     const url = `https://api.mercadolibre.com/items/${productId}`;
 
     try {
