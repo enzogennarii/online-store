@@ -19,7 +19,7 @@ class ProductDetail extends Component {
         <h3 data-testid="product-detail-name">{ product.title }</h3>
         <p data-testid="product-detail-price">{ product.price }</p>
         <button
-          onClick={() => this.props.addToCart(product)}
+          onClick={ () => this.props.addToCart(product) }
           data-testid="add-to-cart-button"
         >
           Adicionar ao carrinho
