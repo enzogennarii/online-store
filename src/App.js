@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
-import { getCategories } from './services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
 
 import './App.css';
 
@@ -17,9 +17,9 @@ class App extends React.Component {
   };
 
   fetchCategories = async () => {
-    const response = await getCategories();
+    const data = await getCategories();
     this.setState({
-      categories: response,
+      categories: data,
     });
   };
 
@@ -47,8 +47,7 @@ class App extends React.Component {
 
   handleSearchButton = async () => {
     const { searchTerm } = this.state;
-    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=$${searchTerm}`);
-    const products = await response.json();
+    const products = await getProductsFromCategoryAndQuery('', searchTerm);
     this.setState({
       prodList: products.results,
       unmadeSearch: false,
@@ -57,8 +56,7 @@ class App extends React.Component {
 
   handleSetCategory = async ({ target }) => {
     const category = target.value;
-    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?category=${category}`);
-    const products = await response.json();
+    const products = await getProductsFromCategoryAndQuery(category);
     this.setState({
       prodList: products.results,
       unmadeSearch: false,

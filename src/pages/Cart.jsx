@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 class Cart extends Component {
   state = {
@@ -8,10 +9,11 @@ class Cart extends Component {
 
   render() {
     const { cartItems } = this.state;
-    const isCartEmpty = cartItems === null || cartItems.length === 0;
+    const isCartEmpty = cartItems === null || !cartItems.length;
 
     return (
       <section className="cart-page">
+        <Link exact to="/">Página Inicial</Link>
         <p data-testid="shopping-cart-empty-message">
           {isCartEmpty ? 'Seu carrinho está vazio' : (
             <ul>

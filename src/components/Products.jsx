@@ -6,7 +6,7 @@ class Products extends Component {
   render() {
     const { emptyList, prodList, handleAddToCart } = this.props;
     return (
-      <div>
+      <div className="products-container">
         { emptyList
           ? 'Nenhum produto foi encontrado'
           : (
