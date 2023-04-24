@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 class Cart extends Component {
-  state = {
-    cartItems: JSON.parse(localStorage.getItem('cart-items')),
-  };
-
   render() {
-    const { cartItems } = this.state;
+    const { cartItems, handleRemoveProduct, handleChangeQuantity } = this.props;
     const isCartEmpty = cartItems === null || !cartItems.length;
 
     return (
@@ -23,12 +19,34 @@ class Cart extends Component {
               <li key={ id }>
                 <img src={ thumbnail } alt={ title } />
                 <p data-testid="shopping-cart-product-name">{title}</p>
+                <button
+                  data-testid="remove-product"
+                  name={ id }
+                  onClick={ handleRemoveProduct }
+                >
+                  Remover Item
+                </button>
+                <button
+                  data-testid="product-decrease-quantity"
+                  name={ id }
+                  value="-"
+                  onClick={ handleChangeQuantity }
+                >
+                  -
+                </button>
                 <p data-testid="shopping-cart-product-quantity">{quantity}</p>
+                <button
+                  data-testid="product-increase-quantity"
+                  name={ id }
+                  value="+"
+                  onClick={ handleChangeQuantity }
+                >
+                  +
+                </button>
               </li>
             ))}
           </ul>
         )}
-
       </section>
     );
   }

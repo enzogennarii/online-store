@@ -14,7 +14,7 @@ class App extends React.Component {
     searchTerm: '',
     currCategory: '',
     unmadeSearch: true,
-    cartItems: [],
+    cartItems: JSON.parse(localStorage.getItem('cart-items')) || [],
   };
 
   fetchCategories = async () => {
@@ -70,6 +70,33 @@ class App extends React.Component {
     localStorage.setItem('cart-items', JSON.stringify(cartItems));
   };
 
+  handleChangeQuantity = ({ target }) => {
+    const { name, value } = target;
+    const { cartItems } = this.state;
+
+    const cart = cartItems;
+    const targetID = name;
+    const product = cart.find(({ id }) => id === targetID);
+    if (value === '-' && product.quantity > 1) {
+      product.quantity -= 1;
+    }
+    if (value === '+') {
+      product.quantity += 1;
+    }
+    this.setState({
+      cartItems: cart,
+    }, this.saveCartOnLocalStorage);
+  };
+
+  handleRemoveProduct = ({ target }) => {
+    const { name } = target;
+    const { cartItems } = this.state;
+    const targetID = name;
+    this.setState({
+      cartItems: cartItems.filter(({ id }) => id !== targetID),
+    }, this.saveCartOnLocalStorage);
+  };
+
   render() {
     const { prodList, categories, unmadeSearch, cartItems } = this.state;
     const states = {
@@ -92,7 +119,17 @@ class App extends React.Component {
               states={ states }
             />) }
           />
-          <Route exact path="/cart" render={ () => <Cart cartItems={ cartItems } /> } />
+          <Route
+            exact
+            path="/cart"
+            render={ () => (
+              <Cart
+                handleChangeQuantity={ this.handleChangeQuantity }
+                handleRemoveProduct={ this.handleRemoveProduct }
+                cartItems={ cartItems }
+              />
+            ) }
+          />
           <Route
             exact
             path="/products/:productId"
