@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Products from '../components/Products';
+import Categories from '../components/Categories';
+import SearchInputs from '../components/SearchInputs';
+import SearchResult from '../components/SearchResult';
 
 class Home extends Component {
   async componentDidMount() {
@@ -22,59 +24,25 @@ class Home extends Component {
       unmadeSearch,
     } = states;
 
-    const emptyList = prodList.length === 0;
-
     return (
       <section className="home-page">
         <Link to="/cart" data-testid="shopping-cart-button">
           <button>Carrinho</button>
         </Link>
-        <aside>
-          <ul>
-            { categories.map((category) => (
-              <li key={ category.id }>
-                <label htmlFor={ category.id } data-testid="category">
-                  <input
-                    type="radio"
-                    name="categories"
-                    onChange={ handleSetCategory }
-                    value={ category.id }
-                    id={ category.id }
-                  />
-                  {category.name}
-                </label>
-              </li>
-            )) }
-          </ul>
-        </aside>
-        <input
-          type="text"
-          data-testid="query-input"
-          onChange={ handleSearchInput }
+
+        <Categories
+          handleSetCategory={ handleSetCategory }
+          categories={ categories }
         />
-        <button
-          data-testid="query-button"
-          onClick={ handleSearchButton }
-        >
-          Pesquisar
-        </button>
-        <div>
-          {unmadeSearch
-            ? (
-              <p
-                data-testid="home-initial-message"
-              >
-                Digite algum termo de pesquisa ou escolha uma categoria.
-              </p>
-            )
-            : (
-              <Products
-                handleAddToCart={ handleAddToCart }
-                emptyList={ emptyList }
-                prodList={ prodList }
-              />
-            ) }
-        </div>
+        <SearchInputs
+          handleSearchInput={ handleSearchInput }
+          handleSearchButton={ handleSearchButton }
+        />
+        <SearchResult
+          unmadeSearch={ unmadeSearch }
+          handleAddToCart={ handleAddToCart }
+          prodList={ prodList }
+        />
       </section>
     );
   }

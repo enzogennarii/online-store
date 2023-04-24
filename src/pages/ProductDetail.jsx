@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { getProductById } from '../services/api';
 
 class ProductDetail extends Component {
   state = {
@@ -13,11 +14,9 @@ class ProductDetail extends Component {
     const { match } = this.props;
     const { params } = match;
     const { productId } = params;
-    const url = `https://api.mercadolibre.com/items/${productId}`;
 
     try {
-      const response = await fetch(url);
-      const product = await response.json();
+      const product = await getProductById(productId);
       this.setState({ product, loading: false });
     } catch (error) {
       this.setState({ error, loading: false });
@@ -47,9 +46,11 @@ class ProductDetail extends Component {
 
     return (
       <section className="product-detail-page">
+        <Link to="/">Página Inicial</Link>
         <Link to="/cart" data-testid="shopping-cart-button">
           <button>Carrinho</button>
         </Link>
+
         <img
           src={ product.thumbnail }
           alt={ product.title }
