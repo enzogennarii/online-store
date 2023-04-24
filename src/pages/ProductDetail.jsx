@@ -46,7 +46,7 @@ class ProductDetail extends Component {
 
     return (
       <section className="product-detail-page">
-        <Link exact to="/">Página Inicial</Link>
+        <Link to="/">Página Inicial</Link>
         <Link to="/cart" data-testid="shopping-cart-button">
           <button>Carrinho</button>
         </Link>

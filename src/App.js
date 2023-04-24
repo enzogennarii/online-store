@@ -12,6 +12,7 @@ class App extends React.Component {
     prodList: [],
     categories: [],
     searchTerm: '',
+    currCategory: '',
     unmadeSearch: true,
     cartItems: [],
   };
@@ -46,8 +47,8 @@ class App extends React.Component {
   };
 
   handleSearchButton = async () => {
-    const { searchTerm } = this.state;
-    const products = await getProductsFromCategoryAndQuery('', searchTerm);
+    const { searchTerm, currCategory } = this.state;
+    const products = await getProductsFromCategoryAndQuery(currCategory, searchTerm);
     this.setState({
       prodList: products.results,
       unmadeSearch: false,
@@ -60,6 +61,7 @@ class App extends React.Component {
     this.setState({
       prodList: products.results,
       unmadeSearch: false,
+      currCategory: category,
     });
   };
 

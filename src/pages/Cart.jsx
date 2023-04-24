@@ -13,20 +13,22 @@ class Cart extends Component {
 
     return (
       <section className="cart-page">
-        <Link exact to="/">Página Inicial</Link>
-        <p data-testid="shopping-cart-empty-message">
-          {isCartEmpty ? 'Seu carrinho está vazio' : (
-            <ul>
-              {cartItems.map(({ id, title, thumbnail, quantity }) => (
-                <li key={ id }>
-                  <img src={ thumbnail } alt={ title } />
-                  <p data-testid="shopping-cart-product-name">{title}</p>
-                  <p data-testid="shopping-cart-product-quantity">{quantity}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </p>
+        <Link to="/">Página Inicial</Link>
+
+        {isCartEmpty ? (
+          <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+        ) : (
+          <ul>
+            {cartItems.map(({ id, title, thumbnail, quantity }) => (
+              <li key={ id }>
+                <img src={ thumbnail } alt={ title } />
+                <p data-testid="shopping-cart-product-name">{title}</p>
+                <p data-testid="shopping-cart-product-quantity">{quantity}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
       </section>
     );
   }
