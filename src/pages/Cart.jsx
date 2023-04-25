@@ -47,6 +47,13 @@ class Cart extends Component {
             ))}
           </ul>
         )}
+        <Link
+          to="/checkout"
+          data-testid="checkout-products"
+        >
+          Finalizar compra
+
+        </Link>
       </section>
     );
   }
