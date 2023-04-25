@@ -15,6 +15,11 @@ class App extends React.Component {
     currCategory: '',
     unmadeSearch: true,
     cartItems: JSON.parse(localStorage.getItem('cart-items')) || [],
+    email: '',
+    detail: '',
+    isValidForm: true,
+    rating: '',
+    prodEval: {},
   };
 
   fetchCategories = async () => {
@@ -70,6 +75,16 @@ class App extends React.Component {
     localStorage.setItem('cart-items', JSON.stringify(cartItems));
   };
 
+  saveProdEvalOnLocalStorage = () => {
+    const { prodEval } = this.state;
+    const prodEvalIds = Object.keys(prodEval);
+    if (prodEvalIds !== []) {
+      prodEvalIds.forEach((id) => {
+        localStorage.setItem(id, JSON.stringify(prodEval[id]));
+      });
+    }
+  };
+
   handleChangeQuantity = ({ target }) => {
     const { name, value } = target;
     const { cartItems } = this.state;
@@ -97,8 +112,49 @@ class App extends React.Component {
     }, this.saveCartOnLocalStorage);
   };
 
+  handleChangeForm = ({ target }) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleValidateForm = ({ target }) => {
+    const { email, rating } = this.state;
+    const emailRegex = /^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
+    const erros = [!emailRegex.test(email), !rating.length];
+    this.setState({
+      isValidForm: erros.every((erro) => erro === false),
+    }, () => this.submitForm(target.name));
+  };
+
+  submitForm = (name) => {
+    const { email, rating, detail, prodEval, isValidForm } = this.state;
+    if (isValidForm) {
+      const evaluation = {
+        email,
+        text: detail,
+        rating,
+      };
+      prodEval[name] = prodEval[name] ? [...prodEval[name], evaluation] : [evaluation];
+      this.saveProdEvalOnLocalStorage();
+      this.setState({
+        email: '',
+        detail: '',
+        rating: '',
+      });
+    }
+  };
+
   render() {
-    const { prodList, categories, unmadeSearch, cartItems } = this.state;
+    const { prodList,
+      categories,
+      unmadeSearch,
+      cartItems,
+      email,
+      detail,
+      isValidForm,
+    } = this.state;
     const states = {
       prodList,
       categories,
@@ -137,6 +193,11 @@ class App extends React.Component {
               <ProductDetail
                 { ...props }
                 handleAddToCart={ this.handleAddToCart }
+                handleChangeForm={ this.handleChangeForm }
+                email={ email }
+                detail={ detail }
+                isValidForm={ isValidForm }
+                handleValidateForm={ this.handleValidateForm }
               />
             ) }
           />
