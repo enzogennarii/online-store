@@ -21,6 +21,7 @@ class App extends React.Component {
     isValidForm: true,
     rating: '',
     prodEval: {},
+    cartAmount: localStorage.getItem('cart-amount') || 0,
   };
 
   fetchCategories = async () => {
@@ -34,13 +35,14 @@ class App extends React.Component {
     const { cartItems, prodList } = this.state;
     const prodId = target.name;
     const product = prodList.find(({ id }) => id === prodId);
-    if (!(cartItems.some((item) => prodId === item.id))) {
+    const prodCart = cartItems.find((item) => prodId === item.id);
+    if (!(prodCart)) {
       product.quantity = 1;
       this.setState((prev) => ({
         cartItems: [...prev.cartItems, product],
-      }), () => this.saveCartOnLocalStorage());
+      }), this.saveCartOnLocalStorage);
     } else {
-      product.quantity += 1;
+      prodCart.quantity += 1;
       this.saveCartOnLocalStorage();
     }
   };
@@ -74,6 +76,7 @@ class App extends React.Component {
   saveCartOnLocalStorage = () => {
     const { cartItems } = this.state;
     localStorage.setItem('cart-items', JSON.stringify(cartItems));
+    this.cartItemsQuantity();
   };
 
   saveProdEvalOnLocalStorage = () => {
@@ -147,6 +150,18 @@ class App extends React.Component {
     }
   };
 
+  cartItemsQuantity = () => {
+    const { cartItems } = this.state;
+    const amount = cartItems.reduce((acc, curr) => {
+      acc += curr.quantity;
+      return acc;
+    }, 0);
+    localStorage.setItem('cart-amount', amount);
+    this.setState({
+      cartAmount: amount,
+    });
+  };
+
   render() {
     const { prodList,
       categories,
@@ -155,6 +170,7 @@ class App extends React.Component {
       email,
       detail,
       isValidForm,
+      cartAmount,
     } = this.state;
     const states = {
       prodList,
@@ -174,6 +190,7 @@ class App extends React.Component {
               handleSearchButton={ this.handleSearchButton }
               handleSetCategory={ this.handleSetCategory }
               states={ states }
+              cartAmount={ cartAmount }
             />) }
           />
           <Route
@@ -199,6 +216,8 @@ class App extends React.Component {
                 detail={ detail }
                 isValidForm={ isValidForm }
                 handleValidateForm={ this.handleValidateForm }
+                cartItems={ cartItems }
+                cartAmount={ cartAmount }
               />
             ) }
           />

@@ -11,9 +11,7 @@ class ProductDetail extends Component {
   };
 
   async componentDidMount() {
-    const { match } = this.props;
-    const { params } = match;
-    const { productId } = params;
+    const { match: { params: { productId } } } = this.props;
 
     try {
       const product = await getProductById(productId);
@@ -31,12 +29,12 @@ class ProductDetail extends Component {
       handleChangeForm,
       isValidForm,
       handleValidateForm,
+      cartAmount,
     } = this.props;
     const { product, loading, error } = this.state;
-    const { match } = this.props;
-    const { params } = match;
-    const { productId } = params;
+    const { match: { params: { productId } } } = this.props;
     const reviews = JSON.parse(localStorage.getItem(productId));
+
     if (loading) {
       return (
         <div>
@@ -58,7 +56,12 @@ class ProductDetail extends Component {
       <section className="product-detail-page">
         <Link to="/">Página Inicial</Link>
         <Link to="/cart" data-testid="shopping-cart-button">
-          <button>Carrinho</button>
+          <>
+            <button>Carrinho</button>
+            <span data-testid="shopping-cart-size">
+              {cartAmount}
+            </span>
+          </>
         </Link>
 
         <img

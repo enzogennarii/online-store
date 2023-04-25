@@ -16,6 +16,7 @@ class Home extends Component {
       handleSearchInput,
       handleSearchButton,
       handleSetCategory,
+      cartAmount,
       states } = this.props;
 
     const {
@@ -27,7 +28,12 @@ class Home extends Component {
     return (
       <section className="home-page">
         <Link to="/cart" data-testid="shopping-cart-button">
-          <button>Carrinho</button>
+          <>
+            <button>Carrinho</button>
+            <span data-testid="shopping-cart-size">
+              {cartAmount}
+            </span>
+          </>
         </Link>
 
         <Categories
