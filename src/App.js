@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
+import Checkout from './pages/Checkout';
 import { getCategories, getProductsFromCategoryAndQuery } from './services/api';
 
 import './App.css';
@@ -200,6 +201,13 @@ class App extends React.Component {
                 handleValidateForm={ this.handleValidateForm }
               />
             ) }
+          />
+          <Route
+            path="/checkout"
+            render={ (props) => (<Checkout
+              { ...props }
+              cartItems={ cartItems }
+            />) }
           />
         </Switch>
       </main>
