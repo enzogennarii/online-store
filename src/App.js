@@ -17,7 +17,7 @@ class App extends React.Component {
     cartItems: JSON.parse(localStorage.getItem('cart-items')) || [],
     email: '',
     detail: '',
-    isValidForm: false,
+    isValidForm: true,
     rating: '',
     prodEval: {},
   };
@@ -71,15 +71,18 @@ class App extends React.Component {
   };
 
   saveCartOnLocalStorage = () => {
-    const { cartItems, prodEval } = this.state;
+    const { cartItems } = this.state;
     localStorage.setItem('cart-items', JSON.stringify(cartItems));
+  };
+
+  saveProdEvalOnLocalStorage = () => {
+    const { prodEval } = this.state;
     const prodEvalIds = Object.keys(prodEval);
     if (prodEvalIds !== []) {
       prodEvalIds.forEach((id) => {
         localStorage.setItem(id, JSON.stringify(prodEval[id]));
       });
     }
-    console.log(prodEvalIds);
   };
 
   handleChangeQuantity = ({ target }) => {
@@ -116,32 +119,31 @@ class App extends React.Component {
     });
   };
 
-  validateForm = () => {
-    const { detail, email, rating } = this.state;
+  handleValidateForm = ({ target }) => {
+    const { email, rating } = this.state;
     const emailRegex = /^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
-    const erros = [!emailRegex.test(email), !rating.length, !detail.length];
-    console.log(erros);
+    const erros = [!emailRegex.test(email), !rating.length];
     this.setState({
-      isValidForm: !erros.every((erro) => erro === false),
-    });
+      isValidForm: erros.every((erro) => erro === false),
+    }, () => this.submitForm(target.name));
   };
 
-  handleSubmitForm = ({ target }) => {
-    const { name } = target;
-    this.validateForm();
-    const { email, rating, detail, prodEval } = this.state;
-    const evaluation = {
-      email,
-      text: detail,
-      rating,
-    };
-    prodEval[name] = prodEval[name] ? [...prodEval[name], evaluation] : [evaluation];
-    this.saveCartOnLocalStorage();
-    this.setState({
-      email: '',
-      detail: '',
-      rating: '',
-    });
+  submitForm = (name) => {
+    const { email, rating, detail, prodEval, isValidForm } = this.state;
+    if (isValidForm) {
+      const evaluation = {
+        email,
+        text: detail,
+        rating,
+      };
+      prodEval[name] = prodEval[name] ? [...prodEval[name], evaluation] : [evaluation];
+      this.saveProdEvalOnLocalStorage();
+      this.setState({
+        email: '',
+        detail: '',
+        rating: '',
+      });
+    }
   };
 
   render() {
@@ -152,7 +154,6 @@ class App extends React.Component {
       email,
       detail,
       isValidForm,
-      // prodEval,
     } = this.state;
     const states = {
       prodList,
@@ -196,7 +197,7 @@ class App extends React.Component {
                 email={ email }
                 detail={ detail }
                 isValidForm={ isValidForm }
-                handleSubmitForm={ this.handleSubmitForm }
+                handleValidateForm={ this.handleValidateForm }
               />
             ) }
           />

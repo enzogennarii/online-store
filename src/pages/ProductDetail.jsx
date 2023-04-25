@@ -30,7 +30,7 @@ class ProductDetail extends Component {
       detail,
       handleChangeForm,
       isValidForm,
-      handleSubmitForm,
+      handleValidateForm,
     } = this.props;
     const { product, loading, error } = this.state;
     const { match } = this.props;
@@ -150,14 +150,14 @@ class ProductDetail extends Component {
           <button
             type="button"
             data-testid="submit-review-btn"
-            onClick={ handleSubmitForm }
+            onClick={ handleValidateForm }
             name={ product.id }
           >
             Enviar
           </button>
 
         </form>
-        { isValidForm ? <p data-testid="error-msg">Campos inválidos</p> : null }
+        { isValidForm ? null : <p data-testid="error-msg">Campos inválidos</p> }
         <section>
           <h3>Avaliações:</h3>
           <ul>
@@ -176,17 +176,17 @@ class ProductDetail extends Component {
 }
 
 ProductDetail.propTypes = {
-  handleAddToCart: PropTypes.func.isRequired,
+  handleAddToCart: PropTypes.func,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      productId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  email: PropTypes.string.isRequired,
-  detail: PropTypes.string.isRequired,
-  handleChangeForm: PropTypes.func.isRequired,
-  isValidForm: PropTypes.func.isRequired,
-  handleSubmitForm: PropTypes.func.isRequired,
-};
+      productId: PropTypes.string,
+    }),
+  }),
+  email: PropTypes.string,
+  detail: PropTypes.string,
+  handleChangeForm: PropTypes.func,
+  isValidForm: PropTypes.bool,
+  handleValidateForm: PropTypes.func,
+}.isRequired;
 
 export default ProductDetail;
